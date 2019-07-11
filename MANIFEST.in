@@ -1,0 +1,3 @@
+include README.md LICENSE requirements/install.txt requirements/tests.txt
+include wagtailleafletwidget/static/wagtailleafletwidget/css/geo-field.css
+include wagtailleafletwidget/static/wagtailleafletwidget/js/geo-field.js

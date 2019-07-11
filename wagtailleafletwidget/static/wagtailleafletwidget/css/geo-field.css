@@ -1,0 +1,12 @@
+.geo-field {
+  height: 40vh;
+  min-height: 300px;
+}
+
+.geo-field-location {
+  margin-bottom: 0.8em;
+}
+
+.geo-field-location--hide {
+  display: none;
+}
