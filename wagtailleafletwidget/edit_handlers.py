@@ -5,7 +5,7 @@ from wagtailleafletwidget.widgets import (
 )
 
 from wagtailleafletwidget.app_settings import (
-    GEO_WIDGET_ZOOM
+    LEAFLET_WIDGET_ZOOM
 )
 
 
@@ -13,7 +13,7 @@ class GeoPanel(FieldPanel):
     def __init__(self, *args, **kwargs):
         self.classname = kwargs.pop('classname', "")
         self.hide_latlng = kwargs.pop('hide_latlng', False)
-        self.zoom = kwargs.pop('zoom', GEO_WIDGET_ZOOM)
+        self.zoom = kwargs.pop('zoom', LEAFLET_WIDGET_ZOOM)
 
         super().__init__(*args, **kwargs)
 

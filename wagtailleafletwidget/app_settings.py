@@ -1,6 +1,6 @@
 from django.conf import settings
 
 
-GEO_WIDGET_DEFAULT_LOCATION = getattr(settings, 'GEO_WIDGET_DEFAULT_LOCATION',
+LEAFLET_WIDGET_DEFAULT_LOCATION = getattr(settings, 'LEAFLET_WIDGET_DEFAULT_LOCATION',
                                       {'lat': 0, 'lng': 0})
-GEO_WIDGET_ZOOM = getattr(settings, 'GEO_WIDGET_ZOOM', 7)
+LEAFLET_WIDGET_ZOOM = getattr(settings, 'LEAFLET_WIDGET_ZOOM', 7)

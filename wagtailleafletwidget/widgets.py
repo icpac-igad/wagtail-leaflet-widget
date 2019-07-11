@@ -12,8 +12,8 @@ except:  # NOQA
 
 from wagtailleafletwidget.helpers import geosgeometry_str_to_struct
 from wagtailleafletwidget.app_settings import (
-    GEO_WIDGET_DEFAULT_LOCATION,
-    GEO_WIDGET_ZOOM,
+    LEAFLET_WIDGET_DEFAULT_LOCATION,
+    LEAFLET_WIDGET_ZOOM,
 )
 
 
@@ -27,7 +27,7 @@ class GeoField(HiddenInput):
         self.srid = kwargs.pop('srid', self.srid)
         self.hide_latlng = kwargs.pop('hide_latlng', self.hide_latlng)
         self.id_prefix = kwargs.pop('id_prefix', self.id_prefix)
-        self.zoom = kwargs.pop('zoom', GEO_WIDGET_ZOOM)
+        self.zoom = kwargs.pop('zoom', LEAFLET_WIDGET_ZOOM)
         self.used_in = kwargs.pop('used_in', "GeoField")
 
         super(GeoField, self).__init__(*args, **kwargs)
@@ -75,7 +75,7 @@ class GeoField(HiddenInput):
 
         data = {
             'sourceSelector': source_selector,
-            'defaultLocation': GEO_WIDGET_DEFAULT_LOCATION,
+            'defaultLocation': LEAFLET_WIDGET_DEFAULT_LOCATION,
             'latLngDisplaySelector': '#_id_{}_latlng'.format(name),
             'zoom': self.zoom,
             'srid': self.srid,
