@@ -40,7 +40,7 @@ setup(
     long_description=long_description,
     url='https://github.com/wagtail-leaflet-widget',
     author='Erick Otenyo',
-    author_email='eotenyo@.icpac.net',
+    author_email='otenyo.erick@gmail.com',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Wagtail',
