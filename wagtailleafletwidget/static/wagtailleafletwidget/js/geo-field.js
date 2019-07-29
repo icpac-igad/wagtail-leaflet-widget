@@ -59,6 +59,12 @@ GeoField.prototype.initEvents = function() {
     self.writeLocation(event.target.getLatLng());
   });
 
+  this.map.on("click", function(e) {
+    self.setMapPosition(e.latlng);
+    self.updateLatLng(e.latlng);
+    self.writeLocation(e.latlng);
+  });
+
   this.latLngField.on("input", function(e) {
     var coords = $(this).val();
     var latLng = self.parseStrToLatLng(coords);
