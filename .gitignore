@@ -1,16 +1,14 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 
-# Created by https://www.gitignore.io/api/django,macos,python,visualstudiocode,code
-# Edit at https://www.gitignore.io/?templates=django,macos,python,visualstudiocode,code
+# Created by https://www.gitignore.io/api/code,django,macos,python,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=code,django,macos,python,visualstudiocode
 
 ### Code ###
 .vscode/*
-.vscode/settings.json
+!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-.vscode
 
 ### Django ###
 *.log
@@ -235,7 +233,7 @@ Temporary Items
 # Ignore all local history of files
 .history
 
-# End of https://www.gitignore.io/api/django,macos,python,visualstudiocode,code
+# End of https://www.gitignore.io/api/code,django,macos,python,visualstudiocode
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
