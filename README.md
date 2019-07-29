@@ -1,7 +1,9 @@
 
 # Wagtail-Leaflet-Widget
 
-This is a [Leaflet JS](https://leafletjs.com) based wagtail panel for picking geo location on a map, inspired by [wagtail-geo-widget](https://github.com/Frojd/wagtail-geo-widget)
+This is a [Leaflet JS](https://leafletjs.com) based wagtail panel for picking geo location on a map, inspired by [wagtail-geo-widget](https://github.com/Frojd/wagtail-geo-widget).
+
+The map uses [Open Street Map](https://www.openstreetmap.org) which is open source, thus no API Key is required.
 
 ![Screenshot](screenshot.png)
 
