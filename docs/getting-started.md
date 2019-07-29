@@ -11,9 +11,7 @@
 Install the library:
 
 ```
-$ git clone https://github.com/icpac-igad/wagtail-leaflet-widget
-$ cd wagtail-leaflet-widget
-$ python setup.py install
+$ pip install wagtailleafletwidget
 ```
 
 
