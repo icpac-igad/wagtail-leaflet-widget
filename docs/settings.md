@@ -1,4 +1,6 @@
 # Settings
 
-- `LEAFLET_WIDGET_DEFAULT_LOCATION`: Default map location when no coordinates are set, accepts a dict with lat and lng keys (default is`{'lat': 0, 'lng': 0}`).
+- `LEAFLET_WIDGET_DEFAULT_LOCATION`: Default map location when no coordinates are set, accepts a dict with lat and lng
+  keys (default is`{'lat': 0, 'lng': 0}`).
 - `LEAFLET_WIDGET_ZOOM`: Default zoom level for map (7 is default).
+- `LEAFLET_SCROLL_WHEEL_ZOOM_ENABLED`: Enable or disable map scroll wheel zoom (Default True)

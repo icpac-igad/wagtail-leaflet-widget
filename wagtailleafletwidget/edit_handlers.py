@@ -1,11 +1,10 @@
 from wagtail.admin.edit_handlers import FieldPanel
 
-from wagtailleafletwidget.widgets import (
-    GeoField,
-)
-
 from wagtailleafletwidget.app_settings import (
     LEAFLET_WIDGET_ZOOM
+)
+from wagtailleafletwidget.widgets import (
+    GeoField,
 )
 
 

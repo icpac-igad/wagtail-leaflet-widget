@@ -14,6 +14,7 @@ from wagtailleafletwidget.helpers import geosgeometry_str_to_struct
 from wagtailleafletwidget.app_settings import (
     LEAFLET_WIDGET_DEFAULT_LOCATION,
     LEAFLET_WIDGET_ZOOM,
+    LEAFLET_SCROLL_WHEEL_ZOOM_ENABLED
 )
 
 
@@ -28,6 +29,7 @@ class GeoField(HiddenInput):
         self.hide_latlng = kwargs.pop('hide_latlng', self.hide_latlng)
         self.id_prefix = kwargs.pop('id_prefix', self.id_prefix)
         self.zoom = kwargs.pop('zoom', LEAFLET_WIDGET_ZOOM)
+        self.scroll_wheel_zoom = kwargs.pop('scroll_wheel_zoom', LEAFLET_SCROLL_WHEEL_ZOOM_ENABLED)
         self.used_in = kwargs.pop('used_in', "GeoField")
 
         super(GeoField, self).__init__(*args, **kwargs)
@@ -78,6 +80,7 @@ class GeoField(HiddenInput):
             'defaultLocation': LEAFLET_WIDGET_DEFAULT_LOCATION,
             'latLngDisplaySelector': '#_id_{}_latlng'.format(name),
             'zoom': self.zoom,
+            'scroll_wheel_zoom': self.scroll_wheel_zoom,
             'srid': self.srid,
             'usedIn': self.used_in,
             'inReactStreamfield': in_react_streamfield,
