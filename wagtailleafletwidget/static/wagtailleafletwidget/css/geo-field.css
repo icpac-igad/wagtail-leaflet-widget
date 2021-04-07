@@ -1,12 +1,16 @@
 .geo-field {
-  height: 40vh;
-  min-height: 300px;
+    height: 40vh;
+    min-height: 300px;
 }
 
 .geo-field-location {
-  margin-bottom: 0.8em;
+    margin-bottom: 0.8em;
 }
 
 .geo-field-location--hide {
-  display: none;
+    display: none;
+}
+
+.geo-field .leaflet-pane, .geo-field .leaflet-top {
+    z-index: 10;
 }

@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 version = subprocess.run(['git', 'describe', '--tags'], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
 assert "." in version
 
-assert os.path.isfile("cf_remote/version.py")
+assert os.path.isfile("wagtailleafletwidget/version.py")
 with open("wagtailleafletwidget/VERSION", "w", encoding="utf-8") as fh:
     fh.write(f"{version}\n")
 
