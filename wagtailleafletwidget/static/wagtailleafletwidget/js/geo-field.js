@@ -2,8 +2,8 @@
 "use strict";
 
 function GeoField(options) {
-    var self = this;
-    var defaultLocation = options.defaultLocation;
+    const self = this;
+    let defaultLocation = options.defaultLocation;
 
     defaultLocation = L.latLng(
         parseFloat(defaultLocation.lat),
@@ -13,13 +13,11 @@ function GeoField(options) {
     this.zoom = options.zoom;
     this.scrollWheelZoom = options.scrollWheelZoom;
 
-    console.log(options)
-
-
     this.srid = options.srid;
     this.sourceField = $(options.sourceSelector);
     this.addressField = $(options.addressSelector);
-    this.latLngField = $(options.latLngDisplaySelector);
+    this.latField = $(options.latDisplaySelector);
+    this.lngField = $(options.lngDisplaySelector);
 
     this.initMap(options.mapEl, defaultLocation);
     this.initEvents();
@@ -28,18 +26,28 @@ function GeoField(options) {
     this.updateLatLng(defaultLocation);
 
     this.checkVisibility(function () {
-        var coords = $(self.latLngField).val();
-        var latLng = self.parseStrToLatLng(coords);
-        self.updateMapFromCoords(latLng);
+        const lat = $(self.latField).val();
+        const lng = $(self.lngField).val();
+
+        const latLng = self.parseStrToLatLng(lat, lng);
+
+        if (latLng.lat !== null && latLng.lng !== null) {
+            self.updateMapFromCoords(latLng);
+        }
     });
 }
 
 GeoField.prototype.initMap = function (mapEl, defaultLocation) {
-    var map = L.map(mapEl, {
+    const map = L.map(mapEl, {
         zoom: this.zoom,
         center: defaultLocation,
-        scrollWheelZoom: this.scrollWheelZoom
+        scrollWheelZoom: this.scrollWheelZoom,
+        zoomControl: false
     });
+
+    L.control.zoom({
+        position: 'bottomleft'
+    }).addTo(map);
 
     L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
@@ -47,7 +55,7 @@ GeoField.prototype.initMap = function (mapEl, defaultLocation) {
             '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    var marker = L.marker(defaultLocation, {
+    const marker = L.marker(defaultLocation, {
         draggable: true
     }).addTo(map);
 
@@ -57,12 +65,14 @@ GeoField.prototype.initMap = function (mapEl, defaultLocation) {
 };
 
 GeoField.prototype.initEvents = function () {
-    var self = this;
+    const self = this;
 
     this.marker.on("dragend", function (event) {
         self.setMapPosition(event.target.getLatLng());
         self.updateLatLng(event.target.getLatLng());
         self.writeLocation(event.target.getLatLng());
+
+        self.clearAllFieldMessages()
     });
 
     this.map.on("click", function (e) {
@@ -71,34 +81,50 @@ GeoField.prototype.initEvents = function () {
         self.writeLocation(e.latlng);
     });
 
-    this.latLngField.on("input", function (e) {
-        var coords = $(this).val();
-        var latLng = self.parseStrToLatLng(coords);
-        if (latLng === null) {
+    this.latField.on("input", function (e) {
+        const lat = $(this).val();
+        const lng = self.lngField.val()
+        const latLng = self.parseStrToLatLng(lat, lng);
+
+        if (latLng.lat === null) {
             self.displayWarning(
-                "Invalid location coordinate, use Latitude and Longitude " +
-                "(example: 59.3293234999,18.06858080003)",
-                {
-                    field: self.latLngField
-                }
-            );
+                "Invalid coordinate value",
+                {field: self.latField});
             return;
         }
 
-        self.clearFieldMessage({field: self.latLngField});
+        self.clearFieldMessage({field: self.latField});
+        self.updateMapFromCoords(latLng);
+        self.writeLocation(latLng);
+    });
+
+    this.lngField.on("input", function (e) {
+        const lng = $(this).val();
+        const lat = self.latField.val()
+        const latLng = self.parseStrToLatLng(lat, lng);
+
+        if (latLng.lng === null) {
+            self.displayWarning(
+                "Invalid coordinate value",
+                {field: self.lngField});
+            return;
+        }
+
+        self.clearFieldMessage({field: self.lngField});
         self.updateMapFromCoords(latLng);
         self.writeLocation(latLng);
     });
 };
+
 
 GeoField.prototype.genMessageId = function (field) {
     return "wagtailgeowdidget__" + field.attr("id") + "--warning";
 };
 
 GeoField.prototype.displayWarning = function (msg, options) {
-    var warningMsg;
-    var field = options.field;
-    var className = this.genMessageId(field);
+    let warningMsg;
+    const field = options.field;
+    const className = this.genMessageId(field);
 
     this.clearFieldMessage({field: field});
 
@@ -110,10 +136,10 @@ GeoField.prototype.displayWarning = function (msg, options) {
 };
 
 GeoField.prototype.displaySuccess = function (msg, options) {
-    var self = this;
-    var successMessage;
-    var field = options.field;
-    var className = this.genMessageId(field);
+    const self = this;
+    let successMessage;
+    const field = options.field;
+    const className = this.genMessageId(field);
 
     clearTimeout(this._successTimeout);
 
@@ -131,28 +157,28 @@ GeoField.prototype.displaySuccess = function (msg, options) {
 };
 
 GeoField.prototype.clearFieldMessage = function (options) {
-    var field = options.field;
+    const field = options.field;
 
     if (!field) {
         return;
     }
 
-    var className = this.genMessageId(field);
+    const className = this.genMessageId(field);
     $("." + className).remove();
 };
 
 GeoField.prototype.clearAllFieldMessages = function () {
-    var self = this;
-    var fields = [this.addressField, this.latLngField];
+    const self = this;
+    const fields = [this.addressField, this.latField, this.lngField];
     fields.map(function (field) {
         self.clearFieldMessage({field: field});
     });
 };
 
 GeoField.prototype.checkVisibility = function (callback) {
-    var self = this;
-    var intervalId = setInterval(function () {
-        var visible = $(self.map.getContainer()).is(":visible");
+    const self = this;
+    let intervalId = setInterval(function () {
+        const visible = $(self.map.getContainer()).is(":visible");
         if (!visible) {
             return;
         }
@@ -163,19 +189,27 @@ GeoField.prototype.checkVisibility = function (callback) {
 };
 
 GeoField.prototype.updateLatLng = function (latLng) {
-    this.latLngField.val(latLng.lat + "," + latLng.lng);
+    this.latField.val(latLng.lat)
+    this.lngField.val(latLng.lng)
 };
 
-GeoField.prototype.parseStrToLatLng = function (value) {
-    value = value.split(",").map(function (value) {
-        return parseFloat(value);
-    });
-
-    var latLng = L.latLng(value[0], value[1]);
-
-    if (isNaN(latLng.lat) || isNaN(latLng.lng)) {
-        return null;
+GeoField.prototype.parseStrToLatLng = function (latStr, lngStr) {
+    const latLng = {
+        lat: Number(latStr),
+        lng: Number(lngStr),
     }
+
+    if (isNaN(latLng.lat)) {
+        latLng.lat = null
+    }
+    if (isNaN(latLng.lng)) {
+        latLng.lng = null
+    }
+
+    if (latLng.lat && latLng.lng) {
+        return L.latLng(latLng.lat, latLng.lng);
+    }
+
     return latLng;
 };
 
@@ -189,9 +223,9 @@ GeoField.prototype.setMapPosition = function (latLng) {
 };
 
 GeoField.prototype.writeLocation = function (latLng) {
-    var lat = latLng.lat;
-    var lng = latLng.lng;
-    var value = "SRID=" + this.srid + ";POINT(" + lng + " " + lat + ")";
+    const lat = latLng.lat;
+    const lng = latLng.lng;
+    const value = "SRID=" + this.srid + ";POINT(" + lng + " " + lat + ")";
 
     this.sourceField.val(value);
 };
@@ -201,7 +235,7 @@ GeoField.locationStringToStruct = function (locationString) {
         return {};
     }
 
-    var matches = locationString.match(
+    const matches = locationString.match(
         /^SRID=([0-9]{1,});POINT\s?\((-?[0-9\.]{1,})\s(-?[0-9\.]{1,})\)$/
     );
 
@@ -216,16 +250,15 @@ GeoField.locationStringToStruct = function (locationString) {
 
 function initializeGeoFields() {
     $(".geo-field").each(function (index, el) {
-        var $el = $(el);
-
+        const $el = $(el);
         // Exit if component has already been initialized
         if ($el.data("geoInit")) return;
 
-        var data = window[$el.data("data-id")];
-        var sourceField = $(data.sourceSelector);
+        let data = window[$el.data("data-id")];
+        const sourceField = $(data.sourceSelector);
 
         // If sourceField contains value, parse and apply it over data
-        var sourceFieldData = GeoField.locationStringToStruct(sourceField.val());
+        const sourceFieldData = GeoField.locationStringToStruct(sourceField.val());
         data = Object.assign({}, data, sourceFieldData);
 
         // Fix for wagtail-react-streamfield
@@ -244,7 +277,8 @@ function initializeGeoFields() {
             mapEl: el,
             sourceSelector: sourceField,
             addressSelector: data.addressSelector,
-            latLngDisplaySelector: data.latLngDisplaySelector,
+            latDisplaySelector: data.latDisplaySelector,
+            lngDisplaySelector: data.lngDisplaySelector,
             zoom: data.zoom,
             scrollWheelZoom: data.scroll_wheel_zoom,
             srid: data.srid,

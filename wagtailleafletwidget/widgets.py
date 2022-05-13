@@ -58,10 +58,15 @@ class GeoField(HiddenInput):
 
         location = format_html(
             '<div class="input">'
-            '<input id="_id_{}_latlng" class="{}" maxlength="250" type="text">'
+            '<label>Lat:</label>'
+            '<input id="_id_{}_lat" class="{}" maxlength="250" type="text">'
+            '<label>Long:</label>'
+            '<input id="_id_{}_lng" class="{}" maxlength="250" type="text">'
             '</div>',
             name,
             input_classes,
+            name,
+            input_classes
         )
 
         # A hack to determine if field is inside the new react streamfield
@@ -78,7 +83,8 @@ class GeoField(HiddenInput):
         data = {
             'sourceSelector': source_selector,
             'defaultLocation': LEAFLET_WIDGET_DEFAULT_LOCATION,
-            'latLngDisplaySelector': '#_id_{}_latlng'.format(name),
+            'latDisplaySelector': '#_id_{}_lat'.format(name),
+            'lngDisplaySelector': '#_id_{}_lng'.format(name),
             'zoom': self.zoom,
             'scroll_wheel_zoom': self.scroll_wheel_zoom,
             'srid': self.srid,
@@ -106,8 +112,8 @@ class GeoField(HiddenInput):
         return mark_safe(
             '<script>window["{}"] = {};</script>'.format(data_id, json_data) +
             out +
-            location +
             '<div class="geo-field" data-data-id="{}"></div>'.format(data_id) +
+            location +
             """
             <script>
             (function(){
